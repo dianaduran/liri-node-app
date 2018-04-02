@@ -38,46 +38,35 @@ switch (action) {
 function FunctionTwitter() {
     var params = {
         q: 'nasa',
-        count: 1
+        count: 20
     }
     client.get('search/tweets', params, function(error, tweets, response) {
         if (!error) {
-            console.log(JSON.stringify(tweets, null, 2));
-            var resp = JSON.stringify(tweets, null, 2);
-            console.log("1.-Created: " + resp.statuses);
+            for (var i = 0; i < 20; i++) {
+                console.log("///Tweet: " + i);
+                console.log("1.-Created: " + tweets.statuses[i].created_at);
+                console.log("2.-Text: " + tweets.statuses[i].text);
+            }
         }
     });
 }
 
 function FunctionSpotify(song) {
-    // console.log(song);
-
-    spotify
-        .search({ type: 'track', query: song, limit: 1 })
-        .then(function(response) {
-            console.log(JSON.stringify(response, null, 2));
-            var resp = JSON.stringify(response);
-            console.log(resp.tracks.items);
-        })
-        .catch(function(err) {
-            console.log(err);
-        });
-    // spotify.search({ type: 'track', query: song, limit: 1 }, function(err, data) {
-    //     if (err) {
-    //         return console.log(song + " by Ace of Base" + err);
-    //     }
-    //     //JSON.stringify(data, null, 2);
-    //     var resp = JSON.stringify(data, null, 2);
-    //     //Artist(s)
-    //     console.log("////////");
-    //     var aux = resp;
-    //     console.log("The artist is: " + aux.tracks.items.name);
-    //     // The song's name
-    //     // A preview link of the song from Spotify
-    //     // The album that the song is from
-    //     console.log(resp);
-
-    // });
+    spotify.search({ type: 'track', query: song, limit: 1 }, function(err, data) {
+        if (err) {
+            return console.log(song + " not provided in Spotify");
+        }
+        console.log("///SONG///");
+        //Artist(s)
+        console.log("The artist is: " + data.tracks.items[0].album.artists[0].name);
+        // Song's name
+        console.log("Song name: " + data.tracks.items[0].name);
+        // A preview link of the song from Spotify
+        console.log("Preview link: " + data.tracks.items[0].album.external_urls.spotify);
+        // The album that the song is from
+        console.log("Preview link: " + data.tracks.items[0].album.name);
+        console.log("///END///");
+    });
 }
 
 function FunctionMovie(movie) {
@@ -89,8 +78,8 @@ function FunctionMovie(movie) {
             console.log("Not find that movie, sorry!!, but this is other movie");
             FunctionMovie("Mr.Nobody");
         } else {
-            //console.log(JSON.parse(body));
             // * Title of the movie.
+            console.log("///Movie///");
             console.log("The correct movie's title is: " + JSON.parse(body).Title);
             // * Year the movie came out.
             console.log("The year the movie came out is: " + JSON.parse(body).Year);
@@ -109,6 +98,7 @@ function FunctionMovie(movie) {
             console.log("The plot of the movie is: " + JSON.parse(body).Plot);
             // * Actors in the movie.
             console.log("The actors are: " + JSON.parse(body).Actors);
+            console.log("///END///");
         }
 
     });
@@ -122,7 +112,6 @@ function FunctionWhatSays() {
             console.log(error);
         }
         var dataArray = data.split(",");
-        //  console.log(dataArray[1]);
         FunctionSpotify(dataArray[1]);
     })
 }
