@@ -1,5 +1,6 @@
 require("dotenv").config();
 var inquirer = require("inquirer");
+var fs = require("fs");
 
 
 //twitter
@@ -12,6 +13,7 @@ var client = new Twitter(keys.twitter);
 var Spotify = require('node-spotify-api');
 var spotify = new Spotify(keys.spotify);
 var action = 'spotify-this-song';
+
 
 inquirer
     .prompt([{
@@ -80,7 +82,9 @@ function FunctionTwitter(tweet) {
                 console.log("2.-Text: " + tweets.statuses[i].text);
             }
         }
+        saveData(tweet);
     });
+
 }
 
 
@@ -100,6 +104,7 @@ function FunctionSpotify(song) {
         // The album that the song is from
         console.log("Album: " + data.tracks.items[0].album.name);
         console.log("--------------END--------------------");
+        saveData(song);
     });
 
 }
@@ -136,6 +141,7 @@ function FunctionMovie(movie) {
             // * Actors in the movie.
             console.log("The actors are: ----" + JSON.parse(body).Actors);
             console.log("----------------END---------------------");
+            saveData(movie);
         }
 
     });
@@ -143,7 +149,6 @@ function FunctionMovie(movie) {
 }
 
 function FunctionWhatSays() {
-    var fs = require("fs");
 
     fs.readFile("random.txt", "utf8", function(error, data) {
         if (error) {
@@ -155,4 +160,12 @@ function FunctionWhatSays() {
         if (dataArray[0] == 'movie-this')
             FunctionMovie(dataArray[1]);
     })
+}
+
+function saveData(inf) {
+
+    fs.appendFileSync("log.txt", inf + " \n", "UTF-8", { 'flags': 'a+' });
+
+    console.log("The information was saved!");
+
 }
