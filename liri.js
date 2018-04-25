@@ -17,7 +17,7 @@ var action = 'spotify-this-song';
 
 inquirer
     .prompt([{
-        type: "checkbox",
+        type: "list",
         message: "What do you want to do?",
         choices: ["my-tweets", "spotify-this-song", "movie-this", "do-what-it-says"],
         name: "action"
@@ -113,7 +113,7 @@ function FunctionSpotify(song) {
 function FunctionMovie(movie) {
 
     var request = require("request");
-    // console.log(movie);
+   
     var queryUrl = "http://www.omdbapi.com/?t=" + movie + "&y=&plot=short&apikey=trilogy";
     request(queryUrl, function(err, response, body) {
         if (JSON.parse(body).Error == "Movie not found!") {
@@ -164,7 +164,7 @@ function FunctionWhatSays() {
 
 function saveData(inf) {
 
-    fs.appendFileSync("log.txt", inf + " \n", "UTF-8", { 'flags': 'a+' });
+    fs.appendFileSync("log.txt", inf + " \n", "UTF-8", { 'flags': 'a+' });//a+- Open file for reading and appending. The file is created if it does not exist.
 
     console.log("The information was saved!");
 
